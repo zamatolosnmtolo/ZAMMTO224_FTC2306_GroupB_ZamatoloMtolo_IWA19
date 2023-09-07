@@ -46,9 +46,10 @@ settingsForm.addEventListener('submit', (event) => {
 // Initialize page number
 let page = 1;
 
-if (!books && !Array.isArray(books)) throw new Error('Source required') 
-if (!range && range.length < 2) throw new Error('Range must be an array with two numbers')
-
+// Check for valid book data
+if (!books || !Array.isArray(books)) {
+    throw new Error('Invalid book data.');
+  }
 
 fragment = document.createDocumentFragment()
 const extracted = books.slice(0, 36)
