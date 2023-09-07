@@ -139,7 +139,10 @@ for (const book of filteredBooks) {
   }
 }
 
-data-list-button.disabled = !(matches.length - [page * BOOKS_PER_PAGE] > 0)
+// Event listener for author and genre filtering
+document.getElementById('author-filter').addEventListener('change', updateBookList);
+document.getElementById('genre-filter').addEventListener('change', updateBookList);
+
 
 data-list-button.innerHTML = /* html */ [
     '<span>Show more</span>',
