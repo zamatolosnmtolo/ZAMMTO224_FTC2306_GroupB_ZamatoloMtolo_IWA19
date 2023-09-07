@@ -1,3 +1,6 @@
+// Import data from an external file (data.js)
+import { BOOKS_PER_PAGE, authors, genres, books } from './data.js';
+
 matches = books
 page = 1;
 
