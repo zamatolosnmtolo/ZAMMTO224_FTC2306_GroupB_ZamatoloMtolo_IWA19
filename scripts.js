@@ -143,11 +143,11 @@ for (const book of filteredBooks) {
 document.getElementById('author-filter').addEventListener('change', updateBookList);
 document.getElementById('genre-filter').addEventListener('change', updateBookList);
 
-
-data-list-button.innerHTML = /* html */ [
-    '<span>Show more</span>',
-    '<span class="list__remaining"> (${matches.length - [page * BOOKS_PER_PAGE] > 0 ? matches.length - [page * BOOKS_PER_PAGE] : 0})</span>',
-]
+// "Show More" button functionality
+document.getElementById('show-more').addEventListener('click', () => {
+    // Calculate the new start and end indices for displaying more books
+    start_Index = end_Index;
+    end_Index = Math.min(end_Index + BOOKS_PER_PAGE, books.length);
 
 data-search-cancel.click() { data-search-overlay.open === false }
 data-settings-cancel.click() { querySelect(data-settings-overlay).open === false }
