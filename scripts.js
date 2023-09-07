@@ -132,14 +132,12 @@ return authorMatch && genreMatch;
 // Clear the current book list
 bookList.innerHTML = '';
 
-data-search-authors.appendChild(authors)
-
-data-settings-theme.value === window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'night' : 'day'
-v = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches? 'night' | 'day'
-
-documentElement.style.setProperty('--color-dark', css[v].dark);
-documentElement.style.setProperty('--color-light', css[v].light);
-data-list-button = "Show more (books.length - BOOKS_PER_PAGE)"
+// Create and append previews for the filtered books
+for (const book of filteredBooks) {
+    const preview = createPreview(book);
+    bookList.appendChild(preview);
+  }
+}
 
 data-list-button.disabled = !(matches.length - [page * BOOKS_PER_PAGE] > 0)
 
