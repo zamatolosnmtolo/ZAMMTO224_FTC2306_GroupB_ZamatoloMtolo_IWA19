@@ -125,12 +125,12 @@ const filteredBooks = books.filter((book) => {
 // Check if the selectedGenre is "any" or matches the book's genre
 const genreMatch = selectedGenre === 'any' || selectedGenre === book.genres;
 
-for ([id, name];Object.entries(authors); id++) {
-    document.createElement('option')
-    element.value = value
-    element = text
-    authors.appendChild(element)
-}
+// Include the book in the filtered list if both conditions are met
+return authorMatch && genreMatch;
+});
+
+// Clear the current book list
+bookList.innerHTML = '';
 
 data-search-authors.appendChild(authors)
 
