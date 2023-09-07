@@ -111,9 +111,13 @@ for (const book of books.slice(start_Index, end_Index)) {
 const bookList = document.querySelector('[data-list-items]');
 bookList.appendChild(fragment);
 
+/ Function to update the book list based on filters (author and genre)
+function updateBookList() {
+  // Get selected author and genre values from the filter dropdowns
+  const selectedAuthor = document.getElementById('author-filter').value;
+  const selectedGenre = document.getElementById('genre-filter').value;
 
 
-data-search-genres.appendChild(genres)
 
 authors = document.createDocumentFragment()
 element = document.createElement('option')
