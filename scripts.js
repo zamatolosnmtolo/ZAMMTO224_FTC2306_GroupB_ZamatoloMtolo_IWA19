@@ -14,6 +14,19 @@ const css = {
     night: ['10, 10, 20', '255, 255, 255'],
   };
 
+  // Determine the initial theme based on user's preference
+settingsTheme.value = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'night' : 'day';
+
+// Event listener to open settings overlay
+settingsButton.addEventListener('click', () => {
+    settingsOverlay.showModal();
+  });
+  
+  // Event listener to close settings overlay
+  settingsCancel.addEventListener('click', () => {
+    settingsOverlay.close();
+  });
+
 matches = books
 page = 1;
 
