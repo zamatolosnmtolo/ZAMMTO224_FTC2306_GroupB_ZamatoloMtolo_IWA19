@@ -27,6 +27,12 @@ settingsButton.addEventListener('click', () => {
     settingsOverlay.close();
   });
 
+  // Event listener for the settings form submission
+settingsForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const formData = new FormData(event.target);
+    const selectedTheme = formData.get('theme');
+    
 matches = books
 page = 1;
 
