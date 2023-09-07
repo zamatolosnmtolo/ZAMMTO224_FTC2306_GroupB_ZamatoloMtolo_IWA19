@@ -94,16 +94,12 @@ function createPreview(book) {
   return preview;
 }
 
-for ({ author, image, title, id }; extracted; i++) {
-    const preview = createPreview({
-        author,
-        id,
-        image,
-        title
-    })
-
-    fragment.appendChild(preview)
-}
+// Function to display the book summary
+function displaySummary(summaryText) {
+    // Create a modal or another HTML element to display the summary
+    // Populate the element with the summary text
+    // Implement logic to open and close the summary display
+  }
 
 data-list-items.appendChild(fragment)
 
