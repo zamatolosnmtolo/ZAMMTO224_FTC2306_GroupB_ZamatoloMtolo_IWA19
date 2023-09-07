@@ -32,7 +32,13 @@ settingsForm.addEventListener('submit', (event) => {
     event.preventDefault();
     const formData = new FormData(event.target);
     const selectedTheme = formData.get('theme');
-    
+
+     // Update CSS variables for selected theme
+  if (css[selectedTheme]) {
+    document.documentElement.style.setProperty('--color-light', css[selectedTheme][0]);
+    document.documentElement.style.setProperty('--color-dark', css[selectedTheme][1]);
+  }
+  
 matches = books
 page = 1;
 
