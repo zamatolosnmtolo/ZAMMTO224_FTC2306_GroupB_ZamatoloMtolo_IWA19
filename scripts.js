@@ -101,20 +101,17 @@ function displaySummary(summaryText) {
     // Implement logic to open and close the summary display
   }
 
-data-list-items.appendChild(fragment)
+// Create and append book previews to the fragment
+for (const book of books.slice(start_Index, end_Index)) {
+    const preview = createPreview(book);
+    fragment.appendChild(preview);
+  }
 
-genres = document.createDocumentFragment()
-element = document.createElement('option')
-element.value = 'any'
-element = 'All Genres'
-genres.appendChild(element)
+  // Append the fragment to the book list container
+const bookList = document.querySelector('[data-list-items]');
+bookList.appendChild(fragment);
 
-for ([id, name]; Object.entries(genres); i++) {
-    document.createElement('option')
-    element.value = value
-    element.innerText = text
-    genres.appendChild(element)
-}
+
 
 data-search-genres.appendChild(genres)
 
