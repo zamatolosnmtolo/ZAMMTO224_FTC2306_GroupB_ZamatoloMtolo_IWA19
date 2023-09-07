@@ -117,13 +117,13 @@ function updateBookList() {
   const selectedAuthor = document.getElementById('author-filter').value;
   const selectedGenre = document.getElementById('genre-filter').value;
 
+// Filter the books based on selected author and genre
+const filteredBooks = books.filter((book) => {
+    // Check if the selectedAuthor is "any" or matches the book's author
+    const authorMatch = selectedAuthor === 'any' || selectedAuthor === book.author;
 
-
-authors = document.createDocumentFragment()
-element = document.createElement('option')
-element.value = 'any'
-element.innerText = 'All Authors'
-authors.appendChild(element)
+// Check if the selectedGenre is "any" or matches the book's genre
+const genreMatch = selectedGenre === 'any' || selectedGenre === book.genres;
 
 for ([id, name];Object.entries(authors); id++) {
     document.createElement('option')
