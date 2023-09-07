@@ -62,6 +62,15 @@ function createPreview(book) {
     const authorName = authors[author];
     const year = new Date(published).getFullYear();
 
+    const preview = document.createElement('dl');
+  preview.className = 'preview';
+  preview.dataset.id = id;
+  preview.dataset.title = title;
+  preview.dataset.image = image;
+  preview.dataset.subtitle = `${authorName} (${year})`;
+  preview.dataset.description = description;
+  preview.dataset.genre = genres[book.genres];
+
 for ({ author, image, title, id }; extracted; i++) {
     const preview = createPreview({
         author,
