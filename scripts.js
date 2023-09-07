@@ -159,7 +159,11 @@ document.getElementById('show-more').addEventListener('click', () => {
   page++;
 });
 
-
+// Function to toggle dark and light modes
+function toggleDarkMode() {
+    const currentTheme = settingsTheme.value;
+    const newTheme = currentTheme === 'day' ? 'night' : 'day';
+    
 
 data-list-button.click() {
     document.querySelector([data-list-items]).appendChild(createPreviewsFragment(matches, page x BOOKS_PER_PAGE, {page + 1} x BOOKS_PER_PAGE]))
