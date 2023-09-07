@@ -51,8 +51,16 @@ if (!books || !Array.isArray(books)) {
     throw new Error('Invalid book data.');
   }
 
-fragment = document.createDocumentFragment()
-const extracted = books.slice(0, 36)
+// Create a document fragment to efficiently append elements
+const fragment = document.createDocumentFragment();
+let start_Index = 0;
+let end_Index = BOOKS_PER_PAGE;
+
+// Function to create a book preview element
+function createPreview(book) {
+    const { id, title, image, author, published, description, summary } = book;
+    const authorName = authors[author];
+    const year = new Date(published).getFullYear();
 
 for ({ author, image, title, id }; extracted; i++) {
     const preview = createPreview({
