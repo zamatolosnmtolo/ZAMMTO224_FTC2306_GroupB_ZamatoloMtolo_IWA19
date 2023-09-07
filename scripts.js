@@ -7,40 +7,40 @@ const settingsOverlay = document.querySelector('[data-settings-overlay]');
 const settingsForm = document.querySelector('[data-settings-form]');
 const settingsTheme = document.querySelector('[data-settings-theme]');
 const settingsCancel = document.querySelector('[data-settings-cancel]');
- 
+
 // Define day and night themes
 const css = {
-    day: ['255, 255, 255', '10, 10, 20'],
-    night: ['10, 10, 20', '255, 255, 255'],
-  };
+  day: ['255, 255, 255', '10, 10, 20'],
+  night: ['10, 10, 20', '255, 255, 255'],
+};
 
-  // Determine the initial theme based on user's preference
+// Determine the initial theme based on user's preference
 settingsTheme.value = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'night' : 'day';
 
 // Event listener to open settings overlay
 settingsButton.addEventListener('click', () => {
-    settingsOverlay.showModal();
-  });
-  
-  // Event listener to close settings overlay
-  settingsCancel.addEventListener('click', () => {
-    settingsOverlay.close();
-  });
+  settingsOverlay.showModal();
+});
 
-  // Event listener for the settings form submission
+// Event listener to close settings overlay
+settingsCancel.addEventListener('click', () => {
+  settingsOverlay.close();
+});
+
+// Event listener for the settings form submission
 settingsForm.addEventListener('submit', (event) => {
-    event.preventDefault();
-    const formData = new FormData(event.target);
-    const selectedTheme = formData.get('theme');
+  event.preventDefault();
+  const formData = new FormData(event.target);
+  const selectedTheme = formData.get('theme');
 
-     // Update CSS variables for selected theme
+  // Update CSS variables for selected theme
   if (css[selectedTheme]) {
     document.documentElement.style.setProperty('--color-light', css[selectedTheme][0]);
     document.documentElement.style.setProperty('--color-dark', css[selectedTheme][1]);
   }
 
-   // Close settings overlay
-   settingsOverlay.close();
+  // Close settings overlay
+  settingsOverlay.close();
 });
 
 // Initialize page number
@@ -48,8 +48,8 @@ let page = 1;
 
 // Check for valid book data
 if (!books || !Array.isArray(books)) {
-    throw new Error('Invalid book data.');
-  }
+  throw new Error('Invalid book data.');
+}
 
 // Create a document fragment to efficiently append elements
 const fragment = document.createDocumentFragment();
@@ -58,11 +58,11 @@ let end_Index = BOOKS_PER_PAGE;
 
 // Function to create a book preview element
 function createPreview(book) {
-    const { id, title, image, author, published, description, summary } = book;
-    const authorName = authors[author];
-    const year = new Date(published).getFullYear();
+  const { id, title, image, author, published, description, summary } = book;
+  const authorName = authors[author];
+  const year = new Date(published).getFullYear();
 
-    const preview = document.createElement('dl');
+  const preview = document.createElement('dl');
   preview.className = 'preview';
   preview.dataset.id = id;
   preview.dataset.title = title;
@@ -71,7 +71,6 @@ function createPreview(book) {
   preview.dataset.description = description;
   preview.dataset.genre = genres[book.genres];
 
-  
   preview.innerHTML = `
     <div>
       <img class='preview__image' src="${image}" alt="book pic"/>
@@ -96,44 +95,44 @@ function createPreview(book) {
 
 // Function to display the book summary
 function displaySummary(summaryText) {
-    // Create a modal or another HTML element to display the summary
-    // Populate the element with the summary text
-    // Implement logic to open and close the summary display
-  }
+  // Create a modal or another HTML element to display the summary
+  // Populate the element with the summary text
+  // Implement logic to open and close the summary display
+}
 
 // Create and append book previews to the fragment
 for (const book of books.slice(start_Index, end_Index)) {
-    const preview = createPreview(book);
-    fragment.appendChild(preview);
-  }
+  const preview = createPreview(book);
+  fragment.appendChild(preview);
+}
 
-  // Append the fragment to the book list container
+// Append the fragment to the book list container
 const bookList = document.querySelector('[data-list-items]');
 bookList.appendChild(fragment);
 
-/ Function to update the book list based on filters (author and genre)
+// Function to update the book list based on filters (author and genre)
 function updateBookList() {
   // Get selected author and genre values from the filter dropdowns
   const selectedAuthor = document.getElementById('author-filter').value;
   const selectedGenre = document.getElementById('genre-filter').value;
 
-// Filter the books based on selected author and genre
-const filteredBooks = books.filter((book) => {
+  // Filter the books based on selected author and genre
+  const filteredBooks = books.filter((book) => {
     // Check if the selectedAuthor is "any" or matches the book's author
     const authorMatch = selectedAuthor === 'any' || selectedAuthor === book.author;
 
-// Check if the selectedGenre is "any" or matches the book's genre
-const genreMatch = selectedGenre === 'any' || selectedGenre === book.genres;
+    // Check if the selectedGenre is "any" or matches the book's genre
+    const genreMatch = selectedGenre === 'any' || selectedGenre === book.genres;
 
-// Include the book in the filtered list if both conditions are met
-return authorMatch && genreMatch;
-});
+    // Include the book in the filtered list if both conditions are met
+    return authorMatch && genreMatch;
+  });
 
-// Clear the current book list
-bookList.innerHTML = '';
+  // Clear the current book list
+  bookList.innerHTML = '';
 
-// Create and append previews for the filtered books
-for (const book of filteredBooks) {
+  // Create and append previews for the filtered books
+  for (const book of filteredBooks) {
     const preview = createPreview(book);
     bookList.appendChild(preview);
   }
@@ -145,11 +144,11 @@ document.getElementById('genre-filter').addEventListener('change', updateBookLis
 
 // "Show More" button functionality
 document.getElementById('show-more').addEventListener('click', () => {
-    // Calculate the new start and end indices for displaying more books
-    start_Index = end_Index;
-    end_Index = Math.min(end_Index + BOOKS_PER_PAGE, books.length);
+  // Calculate the new start and end indices for displaying more books
+  start_Index = end_Index;
+  end_Index = Math.min(end_Index + BOOKS_PER_PAGE, books.length);
 
-     // Create and append previews for the additional books
+  // Create and append previews for the additional books
   for (const book of books.slice(start_Index, end_Index)) {
     const preview = createPreview(book);
     bookList.appendChild(preview);
@@ -161,10 +160,10 @@ document.getElementById('show-more').addEventListener('click', () => {
 
 // Function to toggle dark and light modes
 function toggleDarkMode() {
-    const currentTheme = settingsTheme.value;
-    const newTheme = currentTheme === 'day' ? 'night' : 'day';
+  const currentTheme = settingsTheme.value;
+  const newTheme = currentTheme === 'day' ? 'night' : 'day';
 
-    // Update the theme in the settings form
+  // Update the theme in the settings form
   settingsTheme.value = newTheme;
 
   // Update CSS variables for the new theme
