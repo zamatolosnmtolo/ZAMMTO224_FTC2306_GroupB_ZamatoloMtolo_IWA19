@@ -7,6 +7,12 @@ const settingsOverlay = document.querySelector('[data-settings-overlay]');
 const settingsForm = document.querySelector('[data-settings-form]');
 const settingsTheme = document.querySelector('[data-settings-theme]');
 const settingsCancel = document.querySelector('[data-settings-cancel]');
+ 
+// Define day and night themes
+const css = {
+    day: ['255, 255, 255', '10, 10, 20'],
+    night: ['10, 10, 20', '255, 255, 255'],
+  };
 
 matches = books
 page = 1;
@@ -14,15 +20,6 @@ page = 1;
 if (!books && !Array.isArray(books)) throw new Error('Source required') 
 if (!range && range.length < 2) throw new Error('Range must be an array with two numbers')
 
-day = {
-    dark: '10, 10, 20',
-    light: '255, 255, 255',
-}
-
-night = {
-    dark: '255, 255, 255',
-    light: '10, 10, 20',
-}
 
 fragment = document.createDocumentFragment()
 const extracted = books.slice(0, 36)
