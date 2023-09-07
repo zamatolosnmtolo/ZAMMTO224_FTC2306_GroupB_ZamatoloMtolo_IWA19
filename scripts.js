@@ -149,6 +149,12 @@ document.getElementById('show-more').addEventListener('click', () => {
     start_Index = end_Index;
     end_Index = Math.min(end_Index + BOOKS_PER_PAGE, books.length);
 
+     // Create and append previews for the additional books
+  for (const book of books.slice(start_Index, end_Index)) {
+    const preview = createPreview(book);
+    bookList.appendChild(preview);
+  }
+
 data-search-cancel.click() { data-search-overlay.open === false }
 data-settings-cancel.click() { querySelect(data-settings-overlay).open === false }
 data-settings-form.submit() { actions.settings.submit }
