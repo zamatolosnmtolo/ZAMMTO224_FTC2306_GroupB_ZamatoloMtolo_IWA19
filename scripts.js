@@ -82,6 +82,18 @@ function createPreview(book) {
     </div>
   `;
 
+  // Create a "Read Summary" button
+  const readSummaryButton = document.createElement('button');
+  readSummaryButton.textContent = 'Read Summary';
+  readSummaryButton.addEventListener('click', () => {
+    // Display the summary in a modal or another HTML element
+    displaySummary(summary);
+  });
+  preview.appendChild(readSummaryButton);
+
+  return preview;
+}
+
 for ({ author, image, title, id }; extracted; i++) {
     const preview = createPreview({
         author,
