@@ -155,10 +155,11 @@ document.getElementById('show-more').addEventListener('click', () => {
     bookList.appendChild(preview);
   }
 
-data-search-cancel.click() { data-search-overlay.open === false }
-data-settings-cancel.click() { querySelect(data-settings-overlay).open === false }
-data-settings-form.submit() { actions.settings.submit }
-data-list-close.click() { data-list-active.open === false }
+  // Update the page number
+  page++;
+});
+
+
 
 data-list-button.click() {
     document.querySelector([data-list-items]).appendChild(createPreviewsFragment(matches, page x BOOKS_PER_PAGE, {page + 1} x BOOKS_PER_PAGE]))
