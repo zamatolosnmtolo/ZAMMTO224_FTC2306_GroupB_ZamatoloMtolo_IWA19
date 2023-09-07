@@ -71,6 +71,17 @@ function createPreview(book) {
   preview.dataset.description = description;
   preview.dataset.genre = genres[book.genres];
 
+  
+  preview.innerHTML = `
+    <div>
+      <img class='preview__image' src="${image}" alt="book pic"/>
+    </div>
+    <div class='preview__info'>
+      <dt class='preview__title'>${title}</dt>
+      <dt class='preview__author'>By ${authorName}</dt>
+    </div>
+  `;
+
 for ({ author, image, title, id }; extracted; i++) {
     const preview = createPreview({
         author,
