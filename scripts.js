@@ -38,9 +38,13 @@ settingsForm.addEventListener('submit', (event) => {
     document.documentElement.style.setProperty('--color-light', css[selectedTheme][0]);
     document.documentElement.style.setProperty('--color-dark', css[selectedTheme][1]);
   }
-  
-matches = books
-page = 1;
+
+   // Close settings overlay
+   settingsOverlay.close();
+});
+
+// Initialize page number
+let page = 1;
 
 if (!books && !Array.isArray(books)) throw new Error('Source required') 
 if (!range && range.length < 2) throw new Error('Range must be an array with two numbers')
