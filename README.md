@@ -29,26 +29,6 @@ This project aims to fulfill the following user stories:
 
 8. As a user, I want to toggle between dark and light modes so that I can use the app comfortably at night.
 
-## Getting Started
-To get started with this project, follow these steps:
-
-1. Clone the repository to your local machine:
-   ```
-   git clone [repository URL]
-   ```
-
-2. Navigate to the project directory:
-   ```
-   cd ZAMMTO224_FTC2306_GroupB_ZamatoloMtolo_IWA19
-   ```
-
-3. Install the necessary dependencies (if any) by referring to the project's documentation.
-
-4. Start the application by running the appropriate command:
-   ```
-   [start command]
-   ```
-
 ## Usage
 Once the application is up and running, you can perform the following actions:
 
@@ -57,9 +37,6 @@ Once the application is up and running, you can perform the following actions:
 - Use the search functionality to find books based on specific text phrases.
 - Filter books by author or genre to discover books that match your preferences.
 - Toggle between dark and light modes for comfortable usage.
-
-## License
-This project is licensed under the [License Name] License - see the [LICENSE.md](LICENSE.md) file for details.
 
 ## Acknowledgments
 Special thanks to the following resources and communities for their contributions and support in developing this project:
@@ -70,6 +47,6 @@ Special thanks to the following resources and communities for their contribution
 - Stack Overflow
 
 ## Contact
-If you have any questions, feedback, or inquiries, please feel free to reach out to the project owner, Zamatolo Mtolo, at [your email address].
+If you have any questions, feedback, or inquiries, please feel free to reach out to the project owner, Zamatolo Mtolo, at zamatolosnmtolo@gmail.com.
 
 Thank you for using ZAMMTO224_FTC2306_GroupB_ZamatoloMtolo_IWA19! Happy reading!
