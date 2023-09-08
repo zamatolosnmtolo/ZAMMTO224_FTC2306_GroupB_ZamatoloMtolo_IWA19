@@ -103,9 +103,34 @@ elements.searchButton.addEventListener('click', () => {
 elements.searchCancel.addEventListener('click', () => {
   elements.searchOverlay.style.display = 'none';
 });
-elements.bookList.addEventListener('click', (event) => {
-  // Handle book preview click here
-});
+
+// Handle preview click function
+const handlePreviewClick = (event) => {
+  const target = event.target.closest('.preview');
+  if (!target) return; // Clicked outside of a book preview
+
+  const overlay1 = document.querySelector('[data-list-active]');
+  const title = document.querySelector('[data-list-title]');
+  const subtitle = document.querySelector('[data-list-subtitle]');
+  const description = document.querySelector('[data-list-description]');
+  const image1 = document.querySelector('[data-list-image]');
+  const imageblur = document.querySelector('[data-list-blur]');
+
+  const id = target.dataset.id;
+  const book = books.find((book) => book.id === id);
+
+  if (book) {
+    overlay1.style.display = "block";
+    description.innerHTML = book.description;
+    subtitle.innerHTML = `${authors[book.author]} (${new Date(book.published).getFullYear()})`;
+    title.innerHTML = book.title;
+    image1.setAttribute('src', book.image);
+    imageblur.setAttribute('src', book.image);
+  }
+};
+
+// Add event listener to the book list for preview clicks
+elements.bookList.addEventListener('click', handlePreviewClick);
 
 // Initial setup
 setTheme();
@@ -114,8 +139,6 @@ renderBooks(0, BOOKS_PER_PAGE);
 // Show more books when the "Show More" button is clicked
 const showMoreButton = document.querySelector('[data-list-button]');
 showMoreButton.addEventListener('click', showMore);
-
-// Handle book preview click here
 
 // Close book details overlay
 const detailsClose = document.querySelector('[data-list-close]');
