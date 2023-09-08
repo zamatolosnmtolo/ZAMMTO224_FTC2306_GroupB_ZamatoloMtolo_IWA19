@@ -144,52 +144,27 @@ document.querySelector(SELECTORS.bookPreviews).addEventListener('click', (event)
   }
 });
 
-// Handle preview click function
-const handlePreviewClick = (event) => {
-  const target = event.target.closest('.preview');
-  if (!target) return; // Clicked outside of a book preview
-
-  const overlay1 = document.querySelector('[data-list-active]');
+ // Function to display the book preview
+ function displayBookPreview(book) {
+  const overlay = document.querySelector('[data-list-active]');
   const title = document.querySelector('[data-list-title]');
   const subtitle = document.querySelector('[data-list-subtitle]');
   const description = document.querySelector('[data-list-description]');
-  const image1 = document.querySelector('[data-list-image]');
-  const imageblur = document.querySelector('[data-list-blur]');
+  const image = document.querySelector('[data-list-image]');
+  const imageBlur = document.querySelector('[data-list-blur]');
 
-  const id = target.dataset.id;
-  const book = books.find((book) => book.id === id);
-
-  if (book) {
-    overlay1.style.display = "block";
-    description.innerHTML = book.description;
-    subtitle.innerHTML = `${authors[book.author]} (${new Date(book.published).getFullYear()})`;
-    title.innerHTML = book.title;
-    image1.setAttribute('src', book.image);
-    imageblur.setAttribute('src', book.image);
+  overlay.style.display = 'block';
+    title.innerHTML = book.title || '';
+    subtitle.innerHTML = book.subtitle || '';
+    description.innerHTML = book.description || '';
+    image.setAttribute('src', book.image || '');
+    imageBlur.setAttribute('src', book.image || '');
   }
-};
-
-// Add event listener to the book list for preview clicks
-elements.bookList.addEventListener('click', handlePreviewClick);
-
-// Function to display book summaries
-const displayBookSummary = (book) => {
-    const summaryModal = document.createElement('div');
-    summaryModal.className = 'summary-modal';
-    summaryModal.innerHTML = `
-      <h2>${book.title}</h2>
-      <p>${book.description}</p>
-      <button class="close-summary-button">Close</button>
-    `;
   
-    // Add a close event listener to the summary modal
-    const closeSummaryButton = summaryModal.querySelector('.close-summary-button');
-    closeSummaryButton.addEventListener('click', () => {
-      summaryModal.remove();
-    });
-  
-    document.body.appendChild(summaryModal);
-  };
+  // Event listener to close details overlay
+  document.querySelector('[data-list-close]').addEventListener('click', () => {
+    document.querySelector('[data-list-active]').style.display = 'none';
+  });
 
   
 // Initial setup
