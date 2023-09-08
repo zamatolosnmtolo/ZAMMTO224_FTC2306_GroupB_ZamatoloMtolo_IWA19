@@ -34,8 +34,8 @@ function setTheme(theme) {
   document.documentElement.style.setProperty('--color-dark', themes[theme][1]);
 }
 
- // Event listener for settings form submission
- document.querySelector(SELECTORS.settingsForm).addEventListener('submit', (event) => {
+// Event listener for settings form submission
+document.querySelector(SELECTORS.settingsForm).addEventListener('submit', (event) => {
   event.preventDefault();
   const formData = new FormData(event.target);
   const selectedTheme = formData.get('theme');
@@ -86,8 +86,8 @@ for (const [genreId, genreName] of Object.entries(genres)) {
   genreSelect.appendChild(createOptionElement(genreId, genreName));
 }
 
- // Function to create a book preview element
- function createBookPreview(book) {
+// Function to create a book preview element
+function createBookPreview(book) {
   const preview = document.createElement('dl');
   preview.className = CLASSES.preview;
   preview.dataset.id = book.id;
@@ -98,16 +98,16 @@ for (const [genreId, genreName] of Object.entries(genres)) {
   preview.dataset.genre = book.genres;
 
   preview.innerHTML = `
-  <div>
-    <img class='preview__image' src="${book.image}" alt="book pic"/>
-  </div>
-  <div class='preview__info'>
-    <dt class='preview__title'>${book.title}</dt>
-    <dt class='preview__author'>By ${authors[book.author]}</dt>
-  </div>
-`;
+    <div>
+      <img class='preview__image' src="${book.image}" alt="book pic"/>
+    </div>
+    <div class='preview__info'>
+      <dt class='preview__title'>${book.title}</dt>
+      <dt class='preview__author'>By ${authors[book.author]}</dt>
+    </div>
+  `;
 
-return preview;
+  return preview;
 }
 
 // Function to display a subset of books
@@ -128,7 +128,7 @@ function displayBooks(startIndex, endIndex) {
 
 // Initial display of books
 displayBooks(0, BOOKS_PER_PAGE);
-  
+
 // Event listener to handle preview clicks and display book preview
 document.querySelector(SELECTORS.bookPreviews).addEventListener('click', (event) => {
   const target = event.target.closest(`.${CLASSES.preview}`);
@@ -144,8 +144,8 @@ document.querySelector(SELECTORS.bookPreviews).addEventListener('click', (event)
   }
 });
 
- // Function to display the book preview
- function displayBookPreview(book) {
+// Function to display the book preview
+function displayBookPreview(book) {
   const overlay = document.querySelector('[data-list-active]');
   const title = document.querySelector('[data-list-title]');
   const subtitle = document.querySelector('[data-list-subtitle]');
@@ -154,55 +154,50 @@ document.querySelector(SELECTORS.bookPreviews).addEventListener('click', (event)
   const imageBlur = document.querySelector('[data-list-blur]');
 
   overlay.style.display = 'block';
-    title.innerHTML = book.title || '';
-    subtitle.innerHTML = book.subtitle || '';
-    description.innerHTML = book.description || '';
-    image.setAttribute('src', book.image || '');
-    imageBlur.setAttribute('src', book.image || '');
-  }
+  title.innerHTML = book.title || '';
+  subtitle.innerHTML = book.subtitle || '';
+  description.innerHTML = book.description || '';
+  image.setAttribute('src', book.image || '');
+  imageBlur.setAttribute('src', book.image || '');
+}
 
 // Event listener to close details overlay
-  document.querySelector('[data-list-close]').addEventListener('click', () => {
-    document.querySelector('[data-list-active]').style.display = 'none';
-  });
+document.querySelector('[data-list-close]').addEventListener('click', () => {
+  document.querySelector('[data-list-active]').style.display = 'none';
+});
+
+// Show more books
+let currentPage = 1;
+
+document.querySelector('[data-list-button]').addEventListener('click', () => {
+  currentPage++;
+  const startIndex = (currentPage - 1) * BOOKS_PER_PAGE;
+  const endIndex = Math.min(currentPage * BOOKS_PER_PAGE, books.length);
+  displayBooks(startIndex, endIndex);
+});
 
 // Filtering books by author and genre
 let selectedAuthor = 'any';
 let selectedGenre = 'any';
 
-   // Show more books
-   let currentPage = 1;
-  
-   document.querySelector('[data-list-button]').addEventListener('click', () => {
-     currentPage++;
-     const startIndex = (currentPage - 1) * BOOKS_PER_PAGE;
-     const endIndex = Math.min(currentPage * BOOKS_PER_PAGE, books.length);
-     displayBooks(startIndex, endIndex);
-   });
+// Event listeners to update displayed books when author or genre changes
+authorSelect.addEventListener('change', () => {
+  selectedAuthor = authorSelect.value;
+  displayBooks(0, BOOKS_PER_PAGE);
+});
 
-     // Filtering books by author and genre
-  let selectedAuthor = 'any';
-  let selectedGenre = 'any';
-  
-  // Event listeners to update displayed books when author or genre changes
-  authorSelect.addEventListener('change', () => {
-    selectedAuthor = authorSelect.value;
-    displayBooks(0, BOOKS_PER_PAGE);
-  });
+genreSelect.addEventListener('change', () => {
+  selectedGenre = genreSelect.value;
+  displayBooks(0, BOOKS_PER_PAGE);
+});
 
-  genreSelect.addEventListener('change', () => {
-    selectedGenre = genreSelect.value;
-    displayBooks(0, BOOKS_PER_PAGE);
-  });
-  
-  // Update the search criteria and trigger book display
-  const searchInput = document.querySelector("[data-search-input]");
-  searchInput.addEventListener('input', () => {
-    displayBooks(0, BOOKS_PER_PAGE);
-  });
-  
-  // Initialize the theme based on user preference
-  const settingsTheme = document.querySelector(SELECTORS.settingsTheme);
-  settingsTheme.value = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'night' : 'day';
-  setTheme(settingsTheme.value);
-   
+// Update the search criteria and trigger book display
+const searchInput = document.querySelector("[data-search-input]");
+searchInput.addEventListener('input', () => {
+  displayBooks(0, BOOKS_PER_PAGE);
+});
+
+// Initialize the theme based on user preference
+const settingsTheme = document.querySelector(SELECTORS.settingsTheme);
+settingsTheme.value = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'night' : 'day';
+setTheme(settingsTheme.value);
