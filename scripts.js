@@ -34,66 +34,81 @@ function setTheme(theme) {
   document.documentElement.style.setProperty('--color-dark', themes[theme][1]);
 }
 
-// Function to set the theme based on user's preference
-const setTheme = () => {
-  const preferredTheme = window.matchMedia('(prefers-color-scheme: dark)').matches
-    ? 'night'
-    : 'day';
-  elements.settingsTheme.value = preferredTheme;
-};
-
-// Function to update CSS variables based on selected theme
-const updateCSSVariables = (theme) => {
-  document.documentElement.style.setProperty('--color-light', css[theme][0]);
-  document.documentElement.style.setProperty('--color-dark', css[theme][1]);
-};
-
-// Event listener for settings form submission
-const handleSettingsFormSubmit = (event) => {
+ // Event listener for settings form submission
+ document.querySelector(SELECTORS.settingsForm).addEventListener('submit', (event) => {
   event.preventDefault();
   const formData = new FormData(event.target);
-  const selected = Object.fromEntries(formData);
-  updateCSSVariables(selected.theme);
-  elements.settingsOverlay.close();
-};
+  const selectedTheme = formData.get('theme');
+  setTheme(selectedTheme);
+  document.querySelector(SELECTORS.settingsOverlay).style.display = 'none';
+});
 
-// Function to create an option element for a select input
-const createOptionElement = (value, text) => {
+// Event listeners for opening and closing overlays
+document.querySelector(SELECTORS.searchButton).addEventListener('click', () => {
+  document.querySelector(SELECTORS.searchOverlay).style.display = 'block';
+});
+
+document.querySelector(SELECTORS.searchCancel).addEventListener('click', () => {
+  document.querySelector(SELECTORS.searchOverlay).style.display = 'none';
+});
+
+document.querySelector(SELECTORS.settingsButton).addEventListener('click', () => {
+  document.querySelector(SELECTORS.settingsOverlay).style.display = 'block';
+});
+
+document.querySelector(SELECTORS.settingsCancel).addEventListener('click', () => {
+  document.querySelector(SELECTORS.settingsOverlay).style.display = 'none';
+});
+
+// Populate author and genre dropdowns
+const genreSelect = document.querySelector('[data-search-genres]');
+const authorSelect = document.querySelector('[data-search-authors]');
+
+// Function to create option elements for dropdowns
+function createOptionElement(value, text) {
   const optionElement = document.createElement('option');
   optionElement.value = value;
   optionElement.textContent = text;
   return optionElement;
-};
+}
 
-// Function to render a list of books within a specified range
-const renderBooks = (startIndex, endIndex) => {
-  const fragment = document.createDocumentFragment();
-  const extracted = books.slice(startIndex, endIndex);
+// Add "Any Author" and "Any Genre" options
+authorSelect.appendChild(createOptionElement('any', 'Any Author'));
+genreSelect.appendChild(createOptionElement('any', 'Any Genre'));
 
-  extracted.forEach(({ author, image, title, id, description, published }) => {
-    const preview = document.createElement('dl');
-    preview.className = 'preview';
-    preview.dataset.id = id;
-    preview.dataset.title = title;
-    preview.dataset.image = image;
-    preview.dataset.subtitle = `${authors[author]} (${new Date(published).getFullYear()})`;
-    preview.dataset.description = description;
+// Add author options
+for (const [authorId, authorName] of Object.entries(authors)) {
+  authorSelect.appendChild(createOptionElement(authorId, authorName));
+}
 
-    preview.innerHTML = `
-      <div>
-        <image class='preview__image' src="${image}" alt="book pic"}/>
-      </div>
-      <div class='preview__info'>
-        <dt class='preview__title'>${title}<dt>
-        <dt class='preview__author'> By ${authors[author]}</dt>
-      </div>
-    `;
+// Add genre options
+for (const [genreId, genreName] of Object.entries(genres)) {
+  genreSelect.appendChild(createOptionElement(genreId, genreName));
+}
 
-    fragment.appendChild(preview);
-  });
+ // Function to create a book preview element
+ function createBookPreview(book) {
+  const preview = document.createElement('dl');
+  preview.className = CLASSES.preview;
+  preview.dataset.id = book.id;
+  preview.dataset.title = book.title;
+  preview.dataset.image = book.image;
+  preview.dataset.subtitle = `${authors[book.author]} (${(new Date(book.published)).getFullYear()})`;
+  preview.dataset.description = book.description;
+  preview.dataset.genre = book.genres;
 
-  elements.bookList.appendChild(fragment);
-};
+  preview.innerHTML = `
+  <div>
+    <img class='preview__image' src="${book.image}" alt="book pic"/>
+  </div>
+  <div class='preview__info'>
+    <dt class='preview__title'>${book.title}</dt>
+    <dt class='preview__author'>By ${authors[book.author]}</dt>
+  </div>
+`;
+
+return preview;
+}
 
 // Function to load more books
 const showMore = () => {
