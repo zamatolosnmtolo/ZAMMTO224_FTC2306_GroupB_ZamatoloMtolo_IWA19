@@ -37,6 +37,32 @@ const updateCSSVariables = (theme) => {
   document.documentElement.style.setProperty('--color-dark', css[theme][1]);
 };
 
+// Function to filter and render books based on author and genre
+const filterAndRenderBooks = () => {
+  const selectedAuthor = elements.authorSelect.value;
+  const selectedGenre = elements.genreSelect.value;
+  const searchTerm = elements.searchInput.value.toLowerCase().trim();
+
+  const filteredBooks = books.filter((book) => {
+    // Filter by author
+    const authorMatches = selectedAuthor === 'All' || book.author === selectedAuthor;
+    
+    // Filter by genre
+    const genreMatches = selectedGenre === 'All' || book.genre === selectedGenre;
+    
+    // Search by title or author
+    const searchMatches = searchTerm === '' ||
+      book.title.toLowerCase().includes(searchTerm) ||
+      authors[book.author].toLowerCase().includes(searchTerm);
+    
+    return authorMatches && genreMatches && searchMatches;
+  });
+
+  // Clear the existing book list and render the filtered books
+  elements.bookList.innerHTML = '';
+  renderBooks(0, Math.min(filteredBooks.length, BOOKS_PER_PAGE), filteredBooks);
+};
+
 // Event listener for settings form submission
 const handleSettingsFormSubmit = (event) => {
   event.preventDefault();
@@ -47,9 +73,9 @@ const handleSettingsFormSubmit = (event) => {
 };
 
 // Function to render a list of books within a specified range
-const renderBooks = (startIndex, endIndex) => {
+const renderBooks = (startIndex, endIndex, bookArray) => {
   const fragment = document.createDocumentFragment();
-  const extracted = books.slice(startIndex, endIndex);
+  const extracted = bookArray.slice(startIndex, endIndex);
 
   extracted.forEach(({ author, image, title, id, description, published }) => {
     const preview = document.createElement('div');
@@ -144,7 +170,7 @@ elements.searchCancel.addEventListener('click', () => {
 
 // Initial setup
 setTheme();
-renderBooks(0, BOOKS_PER_PAGE);
+renderBooks(0, BOOKS_PER_PAGE, books);
 
 // Show more books when the "Show More" button is clicked
 const showMoreButton = document.querySelector('[data-list-button]');
@@ -158,3 +184,8 @@ const detailsClose = document.querySelector('[data-list-close]');
 detailsClose.addEventListener('click', () => {
   document.querySelector("[data-list-active]").style.display = "none";
 });
+
+// Add event listeners for author and genre select inputs and search input
+elements.authorSelect.addEventListener('change', filterAndRenderBooks);
+elements.genreSelect.addEventListener('change', filterAndRenderBooks);
+elements.searchInput.addEventListener('input', filterAndRenderBooks);
