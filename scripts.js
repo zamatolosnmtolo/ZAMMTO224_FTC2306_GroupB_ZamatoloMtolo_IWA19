@@ -160,7 +160,7 @@ document.querySelector(SELECTORS.bookPreviews).addEventListener('click', (event)
     image.setAttribute('src', book.image || '');
     imageBlur.setAttribute('src', book.image || '');
   }
-  
+
 // Event listener to close details overlay
   document.querySelector('[data-list-close]').addEventListener('click', () => {
     document.querySelector('[data-list-active]').style.display = 'none';
@@ -179,13 +179,17 @@ let selectedGenre = 'any';
      const endIndex = Math.min(currentPage * BOOKS_PER_PAGE, books.length);
      displayBooks(startIndex, endIndex);
    });
-   
 
-// Initial setup
-setTheme();
-renderBooks(0, BOOKS_PER_PAGE);
-handleSearch(); 
-
+     // Filtering books by author and genre
+  let selectedAuthor = 'any';
+  let selectedGenre = 'any';
+  
+  // Event listeners to update displayed books when author or genre changes
+  authorSelect.addEventListener('change', () => {
+    selectedAuthor = authorSelect.value;
+    displayBooks(0, BOOKS_PER_PAGE);
+  });
+ 
 // Show more books when the "Show More" button is clicked
 const showMoreButton = document.querySelector('[data-list-button]');
 showMoreButton.addEventListener('click', () => {
