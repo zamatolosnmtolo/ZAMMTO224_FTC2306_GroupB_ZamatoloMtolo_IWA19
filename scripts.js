@@ -189,21 +189,20 @@ let selectedGenre = 'any';
     selectedAuthor = authorSelect.value;
     displayBooks(0, BOOKS_PER_PAGE);
   });
- 
-// Show more books when the "Show More" button is clicked
-const showMoreButton = document.querySelector('[data-list-button]');
-showMoreButton.addEventListener('click', () => {
-  // Implement showMore function to load more books if needed
-  // Example: renderBooks(currentEndIndex, currentEndIndex + BOOKS_PER_PAGE);
-});
 
-// Close book details overlay
-const detailsClose = document.querySelector('[data-list-close]');
-detailsClose.addEventListener('click', () => {
-  document.querySelector("[data-list-active]").style.display = "none";
-});
-
-// Add event listeners for author and genre select inputs and search input
-elements.authorSelect.addEventListener('change', filterAndRenderBooks);
-elements.genreSelect.addEventListener('change', filterAndRenderBooks);
-elements.searchInput.addEventListener('input', filterAndRenderBooks);
+  genreSelect.addEventListener('change', () => {
+    selectedGenre = genreSelect.value;
+    displayBooks(0, BOOKS_PER_PAGE);
+  });
+  
+  // Update the search criteria and trigger book display
+  const searchInput = document.querySelector("[data-search-input]");
+  searchInput.addEventListener('input', () => {
+    displayBooks(0, BOOKS_PER_PAGE);
+  });
+  
+  // Initialize the theme based on user preference
+  const settingsTheme = document.querySelector(SELECTORS.settingsTheme);
+  settingsTheme.value = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'night' : 'day';
+  setTheme(settingsTheme.value);
+   
