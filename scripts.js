@@ -143,10 +143,16 @@ document.getElementById('author-filter').addEventListener('change', updateBookLi
 document.getElementById('genre-filter').addEventListener('change', updateBookList);
 
 // "Show More" button functionality
-document.getElementById('show-more').addEventListener('click', () => {
-  // Calculate the new start and end indices for displaying more books
-  start_Index = end_Index;
-  end_Index = Math.min(end_Index + BOOKS_PER_PAGE, books.length);
+let currentPage = 1; // Initialize currentPage
+const showMoreButton =
+document.querySelector('[data-list-button]');
+showMoreButton.textContent = 'Show More'; // Add text to the button 
+
+showMoreButton.addEventListener('click', () => {
+    currentPage++;
+    const startIdx = (currentPage - 1) * BOOKS_PER_PAGE;
+    const endIdx = Math.min(currentPage * BOOKS_PER_PAGE, books.length);
+    const moreBooks = books.slice(startIdx, endIdx);  
 
   // Create and append previews for the additional books
   for (const book of books.slice(start_Index, end_Index)) {
