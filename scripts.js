@@ -15,6 +15,7 @@ const elements = {
   searchInput: document.querySelector('[data-search-input]'),
   authorSelect: document.querySelector('[data-settings-author]'),
   genreSelect: document.querySelector('[data-settings-genre]'),
+  searchInput: document.getElementById('search-input'),
 };
 
 // Define CSS color themes
@@ -107,8 +108,6 @@ elements.searchCancel.addEventListener('click', () => {
   elements.searchOverlay.style.display = 'none';
 });
 
-
-
 // Handle preview click function
 const handlePreviewClick = (event) => {
   const target = event.target.closest('.preview');
@@ -137,9 +136,31 @@ const handlePreviewClick = (event) => {
 // Add event listener to the book list for preview clicks
 elements.bookList.addEventListener('click', handlePreviewClick);
 
+// Function to display book summaries
+const displayBookSummary = (book) => {
+    const summaryModal = document.createElement('div');
+    summaryModal.className = 'summary-modal';
+    summaryModal.innerHTML = `
+      <h2>${book.title}</h2>
+      <p>${book.description}</p>
+      <button class="close-summary-button">Close</button>
+    `;
+  
+    // Add a close event listener to the summary modal
+    const closeSummaryButton = summaryModal.querySelector('.close-summary-button');
+    closeSummaryButton.addEventListener('click', () => {
+      summaryModal.remove();
+    });
+  
+    document.body.appendChild(summaryModal);
+  };
+
+  
 // Initial setup
 setTheme();
 renderBooks(0, BOOKS_PER_PAGE);
+handleSearch(); 
+
 
 // Show more books when the "Show More" button is clicked
 const showMoreButton = document.querySelector('[data-list-button]');
