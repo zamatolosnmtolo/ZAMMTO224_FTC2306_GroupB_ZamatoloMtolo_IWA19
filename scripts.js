@@ -12,6 +12,9 @@ const elements = {
   searchButton: document.querySelector('[data-header-search]'),
   searchOverlay: document.querySelector('[data-search-overlay]'),
   searchCancel: document.querySelector('[data-search-cancel]'),
+  searchInput: document.querySelector('[data-search-input]'),
+  authorSelect: document.querySelector('[data-settings-author]'),
+  genreSelect: document.querySelector('[data-settings-genre]'),
 };
 
 // Define CSS color themes
@@ -103,6 +106,8 @@ elements.searchButton.addEventListener('click', () => {
 elements.searchCancel.addEventListener('click', () => {
   elements.searchOverlay.style.display = 'none';
 });
+
+
 
 // Handle preview click function
 const handlePreviewClick = (event) => {
