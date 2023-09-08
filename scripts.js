@@ -15,7 +15,6 @@ const elements = {
   searchInput: document.querySelector('[data-search-input]'),
   authorSelect: document.querySelector('[data-settings-author]'),
   genreSelect: document.querySelector('[data-settings-genre]'),
-  searchInput: document.getElementById('search-input'),
 };
 
 // Define CSS color themes
@@ -44,15 +43,7 @@ const handleSettingsFormSubmit = (event) => {
   const formData = new FormData(event.target);
   const selected = Object.fromEntries(formData);
   updateCSSVariables(selected.theme);
-  elements.settingsOverlay.close();
-};
-
-// Function to create an option element for a select input
-const createOptionElement = (value, text) => {
-  const optionElement = document.createElement('option');
-  optionElement.value = value;
-  optionElement.textContent = text;
-  return optionElement;
+  elements.settingsOverlay.style.display = 'none';
 };
 
 // Function to render a list of books within a specified range
@@ -61,7 +52,7 @@ const renderBooks = (startIndex, endIndex) => {
   const extracted = books.slice(startIndex, endIndex);
 
   extracted.forEach(({ author, image, title, id, description, published }) => {
-    const preview = document.createElement('dl');
+    const preview = document.createElement('div');
     preview.className = 'preview';
     preview.dataset.id = id;
     preview.dataset.title = title;
@@ -71,11 +62,12 @@ const renderBooks = (startIndex, endIndex) => {
 
     preview.innerHTML = `
       <div>
-        <image class='preview__image' src="${image}" alt="book pic"}/>
+        <img class='preview__image' src="${image}" alt="${title} cover"/>
       </div>
       <div class='preview__info'>
-        <dt class='preview__title'>${title}<dt>
-        <dt class='preview__author'> By ${authors[author]}</dt>
+        <dt class='preview__title'>${title}</dt>
+        <dt class='preview__author'>By ${authors[author]}</dt>
+        <dt class='preview__published'>Published: ${new Date(published).toLocaleDateString()}</dt>
       </div>
     `;
 
@@ -85,28 +77,24 @@ const renderBooks = (startIndex, endIndex) => {
   elements.bookList.appendChild(fragment);
 };
 
-// Function to load more books
-const showMore = () => {
-  // Increase the start and end indices to load more books
-  const startIndex = elements.bookList.children.length;
-  const endIndex = startIndex + BOOKS_PER_PAGE;
-  renderBooks(startIndex, endIndex);
-};
+// Function to display book summaries
+const displayBookSummary = (book) => {
+  const summaryModal = document.createElement('div');
+  summaryModal.className = 'summary-modal';
+  summaryModal.innerHTML = `
+    <h2>${book.title}</h2>
+    <p>${book.description}</p>
+    <button class="close-summary-button">Close</button>
+  `;
 
-// Add event listeners
-elements.settingsButton.addEventListener('click', () => {
-  elements.settingsOverlay.showModal();
-});
-elements.settingsCancel.addEventListener('click', () => {
-  elements.settingsOverlay.close();
-});
-elements.settingsForm.addEventListener('submit', handleSettingsFormSubmit);
-elements.searchButton.addEventListener('click', () => {
-  elements.searchOverlay.style.display = 'block';
-});
-elements.searchCancel.addEventListener('click', () => {
-  elements.searchOverlay.style.display = 'none';
-});
+  // Add a close event listener to the summary modal
+  const closeSummaryButton = summaryModal.querySelector('.close-summary-button');
+  closeSummaryButton.addEventListener('click', () => {
+    summaryModal.remove();
+  });
+
+  document.body.appendChild(summaryModal);
+};
 
 // Handle preview click function
 const handlePreviewClick = (event) => {
@@ -124,7 +112,7 @@ const handlePreviewClick = (event) => {
   const book = books.find((book) => book.id === id);
 
   if (book) {
-    overlay1.style.display = "block";
+    overlay1.style.display = 'block';
     description.innerHTML = book.description;
     subtitle.innerHTML = `${authors[book.author]} (${new Date(book.published).getFullYear()})`;
     title.innerHTML = book.title;
@@ -136,35 +124,34 @@ const handlePreviewClick = (event) => {
 // Add event listener to the book list for preview clicks
 elements.bookList.addEventListener('click', handlePreviewClick);
 
-// Function to display book summaries
-const displayBookSummary = (book) => {
-    const summaryModal = document.createElement('div');
-    summaryModal.className = 'summary-modal';
-    summaryModal.innerHTML = `
-      <h2>${book.title}</h2>
-      <p>${book.description}</p>
-      <button class="close-summary-button">Close</button>
-    `;
-  
-    // Add a close event listener to the summary modal
-    const closeSummaryButton = summaryModal.querySelector('.close-summary-button');
-    closeSummaryButton.addEventListener('click', () => {
-      summaryModal.remove();
-    });
-  
-    document.body.appendChild(summaryModal);
-  };
+// Add event listeners for the "Settings" and "Search" buttons
+elements.settingsButton.addEventListener('click', () => {
+  elements.settingsOverlay.style.display = 'block';
+});
 
-  
+elements.searchButton.addEventListener('click', () => {
+  elements.searchOverlay.style.display = 'block';
+});
+
+// Close the settings and search overlays when the "Cancel" button is clicked
+elements.settingsCancel.addEventListener('click', () => {
+  elements.settingsOverlay.style.display = 'none';
+});
+
+elements.searchCancel.addEventListener('click', () => {
+  elements.searchOverlay.style.display = 'none';
+});
+
 // Initial setup
 setTheme();
 renderBooks(0, BOOKS_PER_PAGE);
-handleSearch(); 
-
 
 // Show more books when the "Show More" button is clicked
 const showMoreButton = document.querySelector('[data-list-button]');
-showMoreButton.addEventListener('click', showMore);
+showMoreButton.addEventListener('click', () => {
+  // Implement showMore function to load more books if needed
+  // Example: renderBooks(currentEndIndex, currentEndIndex + BOOKS_PER_PAGE);
+});
 
 // Close book details overlay
 const detailsClose = document.querySelector('[data-list-close]');
