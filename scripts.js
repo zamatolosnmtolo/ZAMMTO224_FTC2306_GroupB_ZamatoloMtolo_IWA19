@@ -17,30 +17,32 @@ const SELECTORS = {
   searchOverlay: '[data-search-overlay]',
   bookPreviews: '[data-list-items]',
   bookSummary: '[data-book-summary]',
-  searchGenres: '[data-search-genres]',
-  searchAuthors: '[data-search-authors]',
-  searchInput: '[data-search-input]',
-  listActive: '[data-list-active]',
-  listTitle: '[data-list-title]',
-  listSubtitle: '[data-list-subtitle]',
-  listDescription: '[data-list-description]',
-  listImage: '[data-list-image]',
-  listBlur: '[data-list-blur]',
-  listClose: '[data-list-close]',
-  listButton: '[data-list-button]'
 };
 
 const CLASSES = {
   preview: 'preview',
   bookList: 'book-list',
-  // Add your other class names here
 };
 
 // Retrieve elements from the DOM using query selectors
-const elements = {};
-for (const key in SELECTORS) {
-  elements[key] = document.querySelector(SELECTORS[key]);
-}
+const elements = {
+  settingsButton: document.querySelector(SELECTORS.settingsButton),
+  settingsOverlay: document.querySelector(SELECTORS.settingsOverlay),
+  settingsForm: document.querySelector(SELECTORS.settingsForm),
+  settingsTheme: document.querySelector(SELECTORS.settingsTheme),
+  settingsCancel: document.querySelector(SELECTORS.settingsCancel),
+  searchButton: document.querySelector(SELECTORS.searchButton),
+  searchOverlay: document.querySelector(SELECTORS.searchOverlay),
+  bookPreviews: document.querySelector(SELECTORS.bookPreviews),
+  bookSummary: document.querySelector(SELECTORS.bookSummary),
+  listActive: document.querySelector('[data-list-active]'),
+  listTitle: document.querySelector('[data-list-title]'),
+  listSubtitle: document.querySelector('[data-list-subtitle]'),
+  listDescription: document.querySelector('[data-list-description]'),
+  listImage: document.querySelector('[data-list-image]'),
+  listBlur: document.querySelector('[data-list-blur]'), // Element for blurred image
+  listClose: document.querySelector('[data-list-close]'),
+};
 
 // Define CSS themes
 const themes = {
@@ -70,32 +72,41 @@ elements.searchButton.addEventListener('click', () => {
 });
 
 // Event listener to close the search overlay
-elements.searchOverlay.querySelector("[data-search-cancel]").addEventListener('click', () => {
+const searchCancel = document.querySelector("[data-search-cancel]");
+searchCancel.addEventListener('click', () => {
   elements.searchOverlay.style.display = 'none';
 });
 
 // Event listener to open the settings overlay
-elements.settingsButton.addEventListener('click', () => {
+const settingButton = document.querySelector("[data-header-settings]");
+settingButton.addEventListener('click', () => {
   elements.settingsOverlay.style.display = 'block';
 });
 
+// Get the select elements by their data attributes
+const genreSelect = document.querySelector('[data-search-genres]');
+const authorSelect = document.querySelector('[data-search-authors]');
+
 // Event listener to close the settings overlay
-elements.settingsCancel.addEventListener('click', () => {
+const settingCancel = document.querySelector('[data-settings-cancel]');
+settingCancel.addEventListener('click', () => {
   elements.settingsOverlay.style.display = 'none';
 });
 
 // Populate author and genre dropdowns
 // Add the "any" option as the first option
-elements.searchAuthors.appendChild(createOptionElement('any', 'Any Author'));
-elements.searchGenres.appendChild(createOptionElement('any', 'Any Genre'));
+authorSelect.appendChild(createOptionElement('any', 'Any Author'));
+genreSelect.appendChild(createOptionElement('any', 'Any Genre'));
 
-for (const [authorId, authorName] of Object.entries(authors)) {
-  elements.searchAuthors.appendChild(createOptionElement(authorId, authorName));
-}
+Object.entries(authors).forEach(([authorId, authorName]) => {
+  const optionElement = createOptionElement(authorId, authorName);
+  authorSelect.appendChild(optionElement);
+});
 
-for (const [genreId, genreName] of Object.entries(genres)) {
-  elements.searchGenres.appendChild(createOptionElement(genreId, genreName));
-}
+Object.entries(genres).forEach(([genreId, genreName]) => {
+  const optionElement = createOptionElement(genreId, genreName);
+  genreSelect.appendChild(optionElement);
+});
 
 // Function to create option elements for dropdowns
 function createOptionElement(value, text) {
@@ -144,7 +155,8 @@ for (const book of displayedBooks) {
 }
 
 // Append the previews to the book list
-elements.bookPreviews.appendChild(fragment);
+const bookList = document.querySelector('[data-list-items]');
+bookList.appendChild(fragment);
 
 // Event listener to handle preview clicks and display book preview
 elements.bookPreviews.addEventListener('click', (event) => {
@@ -165,21 +177,12 @@ elements.bookPreviews.addEventListener('click', (event) => {
 
 // Function to display the book preview
 function displayBookPreview(book) {
-  const {
-    listActive,
-    listTitle,
-    listSubtitle,
-    listDescription,
-    listImage,
-    listBlur
-  } = elements;
-
-  if (book.id) listActive.style.display = 'block';
-  if (book.title) listTitle.innerHTML = book.title;
-  if (book.subtitle) listSubtitle.innerHTML = book.subtitle;
-  if (book.description) listDescription.innerHTML = book.description;
-  if (book.image) listImage.setAttribute('src', book.image);
-  if (book.imageblur) listBlur.setAttribute('src', book.image);
+  if (book.id) elements.listActive.style.display = 'block';
+  if (book.title) elements.listTitle.innerHTML = book.title;
+  if (book.subtitle) elements.listSubtitle.innerHTML = book.subtitle;
+  if (book.description) elements.listDescription.innerHTML = book.description;
+  if (book.image) elements.listImage.setAttribute('src', book.image);
+  if (book.image) elements.listBlur.setAttribute('src', book.image); // Set blurred image
 }
 
 // Event listener to close details overlay
@@ -188,9 +191,9 @@ elements.listClose.addEventListener('click', () => {
 });
 
 // Show more books
-let currentPage = 1; // Initialize currentPage
-const showMoreButton = elements.listButton;
-showMoreButton.textContent = 'Show More'; // Add text to the button
+let currentPage = 1;
+const showMoreButton = document.querySelector('[data-list-button]');
+showMoreButton.textContent = 'Show More';
 
 showMoreButton.addEventListener('click', () => {
   currentPage++;
@@ -198,58 +201,53 @@ showMoreButton.addEventListener('click', () => {
   const endIdx = Math.min(currentPage * BOOKS_PER_PAGE, books.length);
   const moreBooks = books.slice(startIdx, endIdx);
 
-  // Create and append previews for the new batch of books
   for (const book of moreBooks) {
     createBookPreview(book);
   }
 
-  // Append the new previews to the book list
-  elements.bookPreviews.innerHTML = ''; // Clear existing list
-  elements.bookPreviews.appendChild(fragment);
+  bookList.innerHTML = '';
+  bookList.appendChild(fragment);
 });
 
 // Filtering books by author and genre
-let selectedAuthor = 'any'; // Set the default to 'any'
-let selectedGenre = 'any'; // Set the default to 'any'
+let selectedAuthor = 'any';
+let selectedGenre = 'any';
 
 // Function to display books based on filters
 function displayBooks() {
-  // Filter books based on selected author and genre
   const filteredBooks = books.filter((book) => {
     const authorMatch = selectedAuthor === 'any' || book.author === selectedAuthor;
     const genreMatch = selectedGenre === 'any' || book.genres.includes(selectedGenre);
     return authorMatch && genreMatch;
   });
 
-  // Display a subset of the filtered books
   startIndex = 0;
   endIndex = BOOKS_PER_PAGE;
   const displayedBooks = filteredBooks.slice(startIndex, endIndex);
 
-  // Clear the current book list
-  elements.bookPreviews.innerHTML = '';
+  bookList.innerHTML = '';
 
-  // Iterate through displayed books and create previews
   for (const book of displayedBooks) {
     createBookPreview(book);
   }
 
-  // Append the previews to the book list
-  elements.bookPreviews.appendChild(fragment);
+  bookList.appendChild(fragment);
 }
 
 // Event listener to update displayed books when author or genre changes
-elements.searchAuthors.addEventListener('change', () => {
-  selectedAuthor = elements.searchAuthors.value;
+authorSelect.addEventListener('change', () => {
+  selectedAuthor = authorSelect.value;
   displayBooks();
 });
 
-elements.searchGenres.addEventListener('change', () => {
-  selectedGenre = elements.searchGenres.value;
+genreSelect.addEventListener('change', () => {
+  selectedGenre = genreSelect.value;
   displayBooks();
 });
 
 // Update the search criteria and trigger book display
-elements.searchInput.addEventListener('input', () => {
+const searchInput = document.querySelector("[data-search-input]");
+searchInput.addEventListener('input', () => {
+  titleMatch = searchInput.value.trim().toLowerCase();
   displayBooks();
 });
