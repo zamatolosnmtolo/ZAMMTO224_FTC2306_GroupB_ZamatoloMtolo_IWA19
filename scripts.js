@@ -110,13 +110,21 @@ for (const [genreId, genreName] of Object.entries(genres)) {
 return preview;
 }
 
-// Function to load more books
-const showMore = () => {
-  // Increase the start and end indices to load more books
-  const startIndex = elements.bookList.children.length;
-  const endIndex = startIndex + BOOKS_PER_PAGE;
-  renderBooks(startIndex, endIndex);
-};
+// Function to display a subset of books
+function displayBooks(startIndex, endIndex) {
+  const bookList = document.querySelector(SELECTORS.bookPreviews);
+  bookList.innerHTML = '';
+
+  const fragment = document.createDocumentFragment();
+
+  for (let i = startIndex; i < endIndex; i++) {
+    const book = books[i];
+    const preview = createBookPreview(book); // Create the book preview element
+    fragment.appendChild(preview);
+  }
+
+  bookList.appendChild(fragment);
+}
 
 // Add event listeners
 elements.settingsButton.addEventListener('click', () => {
