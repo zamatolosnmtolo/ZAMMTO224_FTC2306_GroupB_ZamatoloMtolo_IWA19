@@ -126,19 +126,22 @@ function displayBooks(startIndex, endIndex) {
   bookList.appendChild(fragment);
 }
 
-// Add event listeners
-elements.settingsButton.addEventListener('click', () => {
-  elements.settingsOverlay.showModal();
-});
-elements.settingsCancel.addEventListener('click', () => {
-  elements.settingsOverlay.close();
-});
-elements.settingsForm.addEventListener('submit', handleSettingsFormSubmit);
-elements.searchButton.addEventListener('click', () => {
-  elements.searchOverlay.style.display = 'block';
-});
-elements.searchCancel.addEventListener('click', () => {
-  elements.searchOverlay.style.display = 'none';
+// Initial display of books
+displayBooks(0, BOOKS_PER_PAGE);
+  
+// Event listener to handle preview clicks and display book preview
+document.querySelector(SELECTORS.bookPreviews).addEventListener('click', (event) => {
+  const target = event.target.closest(`.${CLASSES.preview}`);
+  if (target) {
+    const bookPreview = {
+      id: target.dataset.id,
+      title: target.dataset.title,
+      image: target.dataset.image,
+      subtitle: target.dataset.subtitle,
+      description: target.dataset.description,
+    };
+    displayBookPreview(bookPreview);
+  }
 });
 
 // Handle preview click function
