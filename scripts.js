@@ -144,18 +144,17 @@ document.getElementById('genre-filter').addEventListener('change', updateBookLis
 
 // "Show More" button functionality
 let currentPage = 1; // Initialize currentPage
-const showMoreButton =
-document.querySelector('[data-list-button]');
-showMoreButton.textContent = 'Show More'; // Add text to the button 
+const showMoreButton = document.querySelector('[data-list-button]');
+showMoreButton.textContent = 'Show More'; // Add text to the button
 
 showMoreButton.addEventListener('click', () => {
-    currentPage++;
-    const startIdx = (currentPage - 1) * BOOKS_PER_PAGE;
-    const endIdx = Math.min(currentPage * BOOKS_PER_PAGE, books.length);
-    const moreBooks = books.slice(startIdx, endIdx);  
+  currentPage++;
+  const startIdx = (currentPage - 1) * BOOKS_PER_PAGE;
+  const endIdx = Math.min(currentPage * BOOKS_PER_PAGE, books.length);
+  const moreBooks = books.slice(startIdx, endIdx);
 
   // Create and append previews for the additional books
-  for (const book of books.slice(start_Index, end_Index)) {
+  for (const book of moreBooks) {
     const preview = createPreview(book);
     bookList.appendChild(preview);
   }
