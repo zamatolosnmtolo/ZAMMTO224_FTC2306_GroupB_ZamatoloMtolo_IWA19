@@ -161,12 +161,26 @@ document.querySelector(SELECTORS.bookPreviews).addEventListener('click', (event)
     imageBlur.setAttribute('src', book.image || '');
   }
   
-  // Event listener to close details overlay
+// Event listener to close details overlay
   document.querySelector('[data-list-close]').addEventListener('click', () => {
     document.querySelector('[data-list-active]').style.display = 'none';
   });
 
+// Filtering books by author and genre
+let selectedAuthor = 'any';
+let selectedGenre = 'any';
+
+   // Show more books
+   let currentPage = 1;
   
+   document.querySelector('[data-list-button]').addEventListener('click', () => {
+     currentPage++;
+     const startIndex = (currentPage - 1) * BOOKS_PER_PAGE;
+     const endIndex = Math.min(currentPage * BOOKS_PER_PAGE, books.length);
+     displayBooks(startIndex, endIndex);
+   });
+   
+
 // Initial setup
 setTheme();
 renderBooks(0, BOOKS_PER_PAGE);
