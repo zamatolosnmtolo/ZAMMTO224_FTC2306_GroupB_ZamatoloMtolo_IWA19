@@ -1,46 +1,38 @@
-// Import necessary variables from './data.js'
-import { BOOKS_PER_PAGE, authors, genres, books } from './data.js';
+import {
+  BOOKS_PER_PAGE,
+  authors,
+  genres,
+  books
+} from './data.js';
 
-// Constants for selectors and classes
 const SELECTORS = {
   settingsButton: '[data-header-settings]',
   settingsOverlay: '[data-settings-overlay]',
   settingsForm: '[data-settings-form]',
   settingsTheme: '[data-settings-theme]',
   settingsCancel: '[data-settings-cancel]',
-  searchButton: '[data-header-search]', // Example search button selector
-  searchOverlay: '[data-search-overlay]', // Example search overlay selector
-  bookPreviews: '[data-list-items]', // Selector for book previews container
-  bookSummary: '[data-book-summary]', // Selector for book summary element
+  searchButton: '[data-header-search]',
+  searchOverlay: '[data-search-overlay]',
+  bookPreviews: '[data-list-items]',
+  bookSummary: '[data-book-summary]',
+  searchCancel: '[data-search-cancel]',
 };
 
 const CLASSES = {
   preview: 'preview',
-  bookList: 'book-list', // Example class for the book list container
-  // Add your other class names here
+  bookList: 'book-list',
 };
 
-// Define constants for DOM elements
-const elements = {
-  settingsButton: document.querySelector('[data-header-settings]'),
-  settingsOverlay: document.querySelector('[data-settings-overlay]'),
-  settingsForm: document.querySelector('[data-settings-form]'),
-  settingsTheme: document.querySelector('[data-settings-theme]'),
-  settingsCancel: document.querySelector('[data-settings-cancel]'),
-  bookList: document.querySelector('[data-list-items]'),
-  searchButton: document.querySelector('[data-header-search]'),
-  searchOverlay: document.querySelector('[data-search-overlay]'),
-  searchCancel: document.querySelector('[data-search-cancel]'),
-  searchInput: document.querySelector('[data-search-input]'),
-  authorSelect: document.querySelector('[data-settings-author]'),
-  genreSelect: document.querySelector('[data-settings-genre]'),
-};
-
-// Define CSS color themes
-const css = {
+const themes = {
   day: ['255, 255, 255', '10, 10, 20'],
   night: ['10, 10, 20', '255, 255, 255'],
 };
+
+// Utility function to set CSS variables for theme
+function setTheme(theme) {
+  document.documentElement.style.setProperty('--color-light', themes[theme][0]);
+  document.documentElement.style.setProperty('--color-dark', themes[theme][1]);
+}
 
 // Function to set the theme based on user's preference
 const setTheme = () => {
