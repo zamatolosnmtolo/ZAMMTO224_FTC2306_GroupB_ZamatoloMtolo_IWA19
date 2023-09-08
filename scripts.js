@@ -1,6 +1,25 @@
 // Import necessary variables from './data.js'
 import { BOOKS_PER_PAGE, authors, genres, books } from './data.js';
 
+// Constants for selectors and classes
+const SELECTORS = {
+  settingsButton: '[data-header-settings]',
+  settingsOverlay: '[data-settings-overlay]',
+  settingsForm: '[data-settings-form]',
+  settingsTheme: '[data-settings-theme]',
+  settingsCancel: '[data-settings-cancel]',
+  searchButton: '[data-header-search]', // Example search button selector
+  searchOverlay: '[data-search-overlay]', // Example search overlay selector
+  bookPreviews: '[data-list-items]', // Selector for book previews container
+  bookSummary: '[data-book-summary]', // Selector for book summary element
+};
+
+const CLASSES = {
+  preview: 'preview',
+  bookList: 'book-list', // Example class for the book list container
+  // Add your other class names here
+};
+
 // Define constants for DOM elements
 const elements = {
   settingsButton: document.querySelector('[data-header-settings]'),
