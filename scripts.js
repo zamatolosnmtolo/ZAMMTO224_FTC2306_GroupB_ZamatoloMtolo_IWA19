@@ -37,48 +37,30 @@ const updateCSSVariables = (theme) => {
   document.documentElement.style.setProperty('--color-dark', css[theme][1]);
 };
 
-// Function to filter and render books based on author and genre
-const filterAndRenderBooks = () => {
-  const selectedAuthor = elements.authorSelect.value;
-  const selectedGenre = elements.genreSelect.value;
-  const searchTerm = elements.searchInput.value.toLowerCase().trim();
-
-  const filteredBooks = books.filter((book) => {
-    // Filter by author
-    const authorMatches = selectedAuthor === 'All' || book.author === selectedAuthor;
-    
-    // Filter by genre
-    const genreMatches = selectedGenre === 'All' || book.genre === selectedGenre;
-    
-    // Search by title or author
-    const searchMatches = searchTerm === '' ||
-      book.title.toLowerCase().includes(searchTerm) ||
-      authors[book.author].toLowerCase().includes(searchTerm);
-    
-    return authorMatches && genreMatches && searchMatches;
-  });
-
-  // Clear the existing book list and render the filtered books
-  elements.bookList.innerHTML = '';
-  renderBooks(0, Math.min(filteredBooks.length, BOOKS_PER_PAGE), filteredBooks);
-};
-
 // Event listener for settings form submission
 const handleSettingsFormSubmit = (event) => {
   event.preventDefault();
   const formData = new FormData(event.target);
   const selected = Object.fromEntries(formData);
   updateCSSVariables(selected.theme);
-  elements.settingsOverlay.style.display = 'none';
+  elements.settingsOverlay.close();
+};
+
+// Function to create an option element for a select input
+const createOptionElement = (value, text) => {
+  const optionElement = document.createElement('option');
+  optionElement.value = value;
+  optionElement.textContent = text;
+  return optionElement;
 };
 
 // Function to render a list of books within a specified range
-const renderBooks = (startIndex, endIndex, bookArray) => {
+const renderBooks = (startIndex, endIndex) => {
   const fragment = document.createDocumentFragment();
-  const extracted = bookArray.slice(startIndex, endIndex);
+  const extracted = books.slice(startIndex, endIndex);
 
   extracted.forEach(({ author, image, title, id, description, published }) => {
-    const preview = document.createElement('div');
+    const preview = document.createElement('dl');
     preview.className = 'preview';
     preview.dataset.id = id;
     preview.dataset.title = title;
@@ -88,12 +70,11 @@ const renderBooks = (startIndex, endIndex, bookArray) => {
 
     preview.innerHTML = `
       <div>
-        <img class='preview__image' src="${image}" alt="${title} cover"/>
+        <image class='preview__image' src="${image}" alt="book pic"}/>
       </div>
       <div class='preview__info'>
-        <dt class='preview__title'>${title}</dt>
-        <dt class='preview__author'>By ${authors[author]}</dt>
-        <dt class='preview__published'>Published: ${new Date(published).toLocaleDateString()}</dt>
+        <dt class='preview__title'>${title}<dt>
+        <dt class='preview__author'> By ${authors[author]}</dt>
       </div>
     `;
 
@@ -103,24 +84,28 @@ const renderBooks = (startIndex, endIndex, bookArray) => {
   elements.bookList.appendChild(fragment);
 };
 
-// Function to display book summaries
-const displayBookSummary = (book) => {
-  const summaryModal = document.createElement('div');
-  summaryModal.className = 'summary-modal';
-  summaryModal.innerHTML = `
-    <h2>${book.title}</h2>
-    <p>${book.description}</p>
-    <button class="close-summary-button">Close</button>
-  `;
-
-  // Add a close event listener to the summary modal
-  const closeSummaryButton = summaryModal.querySelector('.close-summary-button');
-  closeSummaryButton.addEventListener('click', () => {
-    summaryModal.remove();
-  });
-
-  document.body.appendChild(summaryModal);
+// Function to load more books
+const showMore = () => {
+  // Increase the start and end indices to load more books
+  const startIndex = elements.bookList.children.length;
+  const endIndex = startIndex + BOOKS_PER_PAGE;
+  renderBooks(startIndex, endIndex);
 };
+
+// Add event listeners
+elements.settingsButton.addEventListener('click', () => {
+  elements.settingsOverlay.showModal();
+});
+elements.settingsCancel.addEventListener('click', () => {
+  elements.settingsOverlay.close();
+});
+elements.settingsForm.addEventListener('submit', handleSettingsFormSubmit);
+elements.searchButton.addEventListener('click', () => {
+  elements.searchOverlay.style.display = 'block';
+});
+elements.searchCancel.addEventListener('click', () => {
+  elements.searchOverlay.style.display = 'none';
+});
 
 // Handle preview click function
 const handlePreviewClick = (event) => {
@@ -138,7 +123,7 @@ const handlePreviewClick = (event) => {
   const book = books.find((book) => book.id === id);
 
   if (book) {
-    overlay1.style.display = 'block';
+    overlay1.style.display = "block";
     description.innerHTML = book.description;
     subtitle.innerHTML = `${authors[book.author]} (${new Date(book.published).getFullYear()})`;
     title.innerHTML = book.title;
@@ -150,42 +135,39 @@ const handlePreviewClick = (event) => {
 // Add event listener to the book list for preview clicks
 elements.bookList.addEventListener('click', handlePreviewClick);
 
-// Add event listeners for the "Settings" and "Search" buttons
-elements.settingsButton.addEventListener('click', () => {
-  elements.settingsOverlay.style.display = 'block';
-});
+// Function to display book summaries
+const displayBookSummary = (book) => {
+    const summaryModal = document.createElement('div');
+    summaryModal.className = 'summary-modal';
+    summaryModal.innerHTML = `
+      <h2>${book.title}</h2>
+      <p>${book.description}</p>
+      <button class="close-summary-button">Close</button>
+    `;
+  
+    // Add a close event listener to the summary modal
+    const closeSummaryButton = summaryModal.querySelector('.close-summary-button');
+    closeSummaryButton.addEventListener('click', () => {
+      summaryModal.remove();
+    });
+  
+    document.body.appendChild(summaryModal);
+  };
 
-elements.searchButton.addEventListener('click', () => {
-  elements.searchOverlay.style.display = 'block';
-});
-
-// Close the settings and search overlays when the "Cancel" button is clicked
-elements.settingsCancel.addEventListener('click', () => {
-  elements.settingsOverlay.style.display = 'none';
-});
-
-elements.searchCancel.addEventListener('click', () => {
-  elements.searchOverlay.style.display = 'none';
-});
-
+  
 // Initial setup
 setTheme();
-renderBooks(0, BOOKS_PER_PAGE, books);
+renderBooks(0, BOOKS_PER_PAGE);
+handleSearch(); 
+
 
 // Show more books when the "Show More" button is clicked
 const showMoreButton = document.querySelector('[data-list-button]');
-showMoreButton.addEventListener('click', () => {
-  // Implement showMore function to load more books if needed
-  // Example: renderBooks(currentEndIndex, currentEndIndex + BOOKS_PER_PAGE);
-});
+showMoreButton.addEventListener('click', showMore);
 
-// Close book details overlay
 const detailsClose = document.querySelector('[data-list-close]');
 detailsClose.addEventListener('click', () => {
+  console.log("Close button clicked"); // Add this line
   document.querySelector("[data-list-active]").style.display = "none";
 });
 
-// Add event listeners for author and genre select inputs and search input
-elements.authorSelect.addEventListener('change', filterAndRenderBooks);
-elements.genreSelect.addEventListener('change', filterAndRenderBooks);
-elements.searchInput.addEventListener('input', filterAndRenderBooks);
