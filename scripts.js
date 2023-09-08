@@ -1,4 +1,4 @@
-// Import necessary variables from 'data.js'
+// Import necessary variables from './data.js'
 import { BOOKS_PER_PAGE, authors, genres, books } from './data.js';
 
 // Define constants for DOM elements
