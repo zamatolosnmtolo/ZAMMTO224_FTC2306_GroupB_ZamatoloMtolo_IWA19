@@ -160,14 +160,20 @@ setTheme();
 renderBooks(0, BOOKS_PER_PAGE);
 handleSearch(); 
 
-
 // Show more books when the "Show More" button is clicked
 const showMoreButton = document.querySelector('[data-list-button]');
-showMoreButton.addEventListener('click', showMore);
+showMoreButton.addEventListener('click', () => {
+  // Implement showMore function to load more books if needed
+  // Example: renderBooks(currentEndIndex, currentEndIndex + BOOKS_PER_PAGE);
+});
 
-document.addEventListener('DOMContentLoaded', () => {
-    const detailsClose = document.querySelector('[data-list-close]');
-    detailsClose.addEventListener('click', () => {
-      document.querySelector("[data-list-active]").style.display = "none";
-    });
-  });
+// Close book details overlay
+const detailsClose = document.querySelector('[data-list-close]');
+detailsClose.addEventListener('click', () => {
+  document.querySelector("[data-list-active]").style.display = "none";
+});
+
+// Add event listeners for author and genre select inputs and search input
+elements.authorSelect.addEventListener('change', filterAndRenderBooks);
+elements.genreSelect.addEventListener('change', filterAndRenderBooks);
+elements.searchInput.addEventListener('input', filterAndRenderBooks);
