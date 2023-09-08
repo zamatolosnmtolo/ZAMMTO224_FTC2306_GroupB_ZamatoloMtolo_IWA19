@@ -165,9 +165,9 @@ handleSearch();
 const showMoreButton = document.querySelector('[data-list-button]');
 showMoreButton.addEventListener('click', showMore);
 
-const detailsClose = document.querySelector('[data-list-close]');
-detailsClose.addEventListener('click', () => {
-  console.log("Close button clicked"); // Add this line
-  document.querySelector("[data-list-active]").style.display = "none";
-});
-
+document.addEventListener('DOMContentLoaded', () => {
+    const detailsClose = document.querySelector('[data-list-close]');
+    detailsClose.addEventListener('click', () => {
+      document.querySelector("[data-list-active]").style.display = "none";
+    });
+  });
